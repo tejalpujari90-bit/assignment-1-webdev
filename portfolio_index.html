@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tejal Pujari – Portfolio</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  html { scroll-behavior: smooth; }
+  body { padding-top: 60px; }
+  section { padding: 4rem 0; }
+  .hero { background: linear-gradient(135deg, #14213d, #2b59c3); color: #fff; padding: 6rem 0; }
+  .avatar { width: 160px; height: 160px; border-radius: 50%; background: #fff; color: #2b59c3;
+            display: flex; align-items: center; justify-content: center; font-size: 4rem; font-weight: 700; }
+  .project-card { transition: transform .2s; }
+  .project-card:hover { transform: translateY(-6px); }
+  footer { background: #14213d; color: #cbd5ff; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="#home">Tejal Pujari</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="menu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+        <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header id="home" class="hero text-center text-md-start">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-md-4 d-flex justify-content-center"><div class="avatar">TP</div></div>
+      <div class="col-md-8">
+        <p class="mb-1">Hello, I'm</p>
+        <h1 class="display-4 fw-bold">Tejal Pujari</h1>
+        <p class="lead">Aspiring Full Stack Developer building clean, responsive web apps.</p>
+        <a href="#projects" class="btn btn-light me-2">View my work</a>
+        <a href="#contact" class="btn btn-outline-light">Contact me</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <h2 class="text-center mb-4">About Me</h2>
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <p>I am a student learning full stack web development. I enjoy turning ideas into
+        simple, useful websites using HTML, CSS, JavaScript and React. I am currently
+        building projects to strengthen my skills and I'm looking for internship opportunities.</p>
+        <ul class="list-unstyled">
+          <li><strong>Education:</strong> Your degree, your college</li>
+          <li><strong>Location:</strong> Mumbai, India</li>
+          <li><strong>Interests:</strong> Web design, problem solving, learning new tools</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="bg-light">
+  <div class="container">
+    <h2 class="text-center mb-4">Skills</h2>
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <label class="d-flex justify-content-between"><span>HTML5</span><span>90%</span></label>
+        <div class="progress mb-3"><div class="progress-bar" style="width:90%"></div></div>
+        <label class="d-flex justify-content-between"><span>CSS3 / Bootstrap</span><span>85%</span></label>
+        <div class="progress mb-3"><div class="progress-bar" style="width:85%"></div></div>
+        <label class="d-flex justify-content-between"><span>JavaScript</span><span>75%</span></label>
+        <div class="progress mb-3"><div class="progress-bar" style="width:75%"></div></div>
+      </div>
+      <div class="col-md-6 col-lg-5">
+        <label class="d-flex justify-content-between"><span>React.js</span><span>70%</span></label>
+        <div class="progress mb-3"><div class="progress-bar bg-success" style="width:70%"></div></div>
+        <label class="d-flex justify-content-between"><span>Git &amp; GitHub</span><span>70%</span></label>
+        <div class="progress mb-3"><div class="progress-bar bg-success" style="width:70%"></div></div>
+        <label class="d-flex justify-content-between"><span>Problem Solving</span><span>80%</span></label>
+        <div class="progress mb-3"><div class="progress-bar bg-success" style="width:80%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <h2 class="text-center mb-4">Featured Projects</h2>
+    <div class="row g-4">
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm project-card">
+          <div class="card-body">
+            <h5 class="card-title">Online Exam Portal</h5>
+            <p class="card-text">React single-page app with timed exams, question palette and instant results.</p>
+            <span class="badge text-bg-primary">React</span> <span class="badge text-bg-secondary">useReducer</span>
+          </div>
+          <div class="card-footer bg-white border-0"><a href="#" class="btn btn-sm btn-outline-primary">View on GitHub</a></div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm project-card">
+          <div class="card-body">
+            <h5 class="card-title">Personal Portfolio</h5>
+            <p class="card-text">Responsive portfolio website built with HTML, CSS and Bootstrap 5.</p>
+            <span class="badge text-bg-primary">Bootstrap</span> <span class="badge text-bg-secondary">HTML/CSS</span>
+          </div>
+          <div class="card-footer bg-white border-0"><a href="#" class="btn btn-sm btn-outline-primary">View on GitHub</a></div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm project-card">
+          <div class="card-body">
+            <h5 class="card-title">Your Third Project</h5>
+            <p class="card-text">Replace this with a short description of another project you have built.</p>
+            <span class="badge text-bg-primary">JavaScript</span>
+          </div>
+          <div class="card-footer bg-white border-0"><a href="#" class="btn btn-sm btn-outline-primary">View on GitHub</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="bg-light">
+  <div class="container">
+    <h2 class="text-center mb-4">Contact Me</h2>
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div id="contactBox">
+          <div class="mb-3">
+            <label for="cname" class="form-label">Name</label>
+            <input type="text" class="form-control" id="cname">
+            <div class="invalid-feedback">Please enter your name.</div>
+          </div>
+          <div class="mb-3">
+            <label for="cemail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="cemail">
+            <div class="invalid-feedback">Please enter a valid email.</div>
+          </div>
+          <div class="mb-3">
+            <label for="cmsg" class="form-label">Message</label>
+            <textarea class="form-control" id="cmsg" rows="4"></textarea>
+            <div class="invalid-feedback">Please write a message.</div>
+          </div>
+          <button class="btn btn-primary w-100" id="sendBtn">Send message</button>
+          <div class="alert alert-success mt-3 d-none" id="okMsg">Thanks! Your message has been sent.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="text-center py-3">
+  <small>&copy; 2026 Tejal Pujari. Built with HTML, CSS &amp; Bootstrap 5.</small>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Simple contact-form validation (demo only: no message is actually sent)
+  document.getElementById("sendBtn").addEventListener("click", function () {
+    const name = document.getElementById("cname");
+    const email = document.getElementById("cemail");
+    const msg = document.getElementById("cmsg");
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value);
+    name.classList.toggle("is-invalid", name.value.trim() === "");
+    email.classList.toggle("is-invalid", !emailOk);
+    msg.classList.toggle("is-invalid", msg.value.trim() === "");
+    const ok = name.value.trim() && emailOk && msg.value.trim();
+    document.getElementById("okMsg").classList.toggle("d-none", !ok);
+    if (ok) { name.value = email.value = msg.value = ""; }
+  });
+</script>
+</body>
+</html>

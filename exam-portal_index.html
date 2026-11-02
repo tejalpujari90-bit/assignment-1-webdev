@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ExamHall – Online Exam Portal</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
+<style>
+:root{--ink:#14213d;--paper:#f5f7fb;--line:#d9dfeb;--accent:#2b59c3;--warn:#c2410c;--good:#15803d;--bad:#b91c1c}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.5}
+main{max-width:860px;margin:0 auto;padding:1.5rem 1rem 3rem}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:.8rem 1.2rem;background:var(--ink);color:#fff}
+.link{background:none;border:0;color:#cbd5ff;margin-left:1rem;cursor:pointer;text-decoration:underline}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:1.2rem;margin-bottom:1rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
+.muted{color:#5b6784;font-size:.9rem}
+button{font:inherit;padding:.55rem 1rem;border-radius:8px;border:1px solid var(--line);background:#fff;cursor:pointer}
+button:disabled{opacity:.4;cursor:not-allowed}
+.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.login{max-width:420px;margin:8vh auto 0}
+.login input{width:100%;padding:.65rem;margin:.3rem 0 1rem;border:1px solid var(--line);border-radius:8px;font:inherit}
+.error,.bad{color:var(--bad)} .ok{color:var(--good)}
+.exam-head{display:flex;justify-content:space-between;align-items:center}
+.timer{font-size:1.4rem;font-weight:600;padding:.2rem .8rem;border:2px solid var(--ink);border-radius:8px}
+.timer.low{color:var(--warn);border-color:var(--warn)}
+.palette{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
+.dot{width:40px;height:40px;padding:0;border-radius:50%}
+.dot.done{background:#dbe6ff;border-color:var(--accent)}
+.dot.flag{border:2px dashed var(--warn)}
+.dot.current{background:var(--accent);color:#fff}
+.option{display:flex;gap:.7rem;align-items:center;padding:.7rem;margin-top:.5rem;border:1px solid var(--line);border-radius:8px;cursor:pointer}
+.option.picked{border-color:var(--accent);background:#eef3ff}
+.actions{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:space-between}
+.summary{text-align:center;border-left:6px solid}
+.summary.pass{border-color:var(--good)} .summary.fail{border-color:var(--bad)}
+.big{font-size:2.6rem;font-weight:700;margin:.2rem 0}
+@media(max-width:520px){.actions button{flex:1 1 100%}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useReducer, useEffect } = React;
+
+/* ---------- DATA ---------- */
+const exams = [
+  { id: "html", title: "HTML & CSS Basics", minutes: 5, questions: [
+    { q: "Which tag defines the largest heading?", options: ["<h6>", "<h1>", "<head>", "<header>"], answer: 1 },
+    { q: "Which CSS property changes text colour?", options: ["font-color", "text-style", "color", "fg"], answer: 2 },
+    { q: "What does CSS stand for?", options: ["Cascading Style Sheets", "Creative Style System", "Computer Style Sheets", "Colorful Style Sheets"], answer: 0 },
+    { q: "Which attribute gives an image alternative text?", options: ["title", "alt", "src", "name"], answer: 1 },
+    { q: "Which display value makes a flex container?", options: ["block", "inline", "flex", "grid-flex"], answer: 2 },
+  ]},
+  { id: "js", title: "JavaScript Fundamentals", minutes: 6, questions: [
+    { q: "Which keyword declares a block-scoped variable?", options: ["var", "let", "def", "dim"], answer: 1 },
+    { q: "What is typeof null in JavaScript?", options: ["'null'", "'undefined'", "'object'", "'number'"], answer: 2 },
+    { q: "Which method adds an item to the end of an array?", options: ["push()", "pop()", "shift()", "concat()"], answer: 0 },
+    { q: "Which operator checks value and type?", options: ["==", "=", "===", "!="], answer: 2 },
+    { q: "What does JSON.parse() do?", options: ["Object to string", "String to object", "Sorts keys", "Deletes keys"], answer: 1 },
+  ]},
+  { id: "react", title: "React Essentials", minutes: 6, questions: [
+    { q: "Which hook adds state to a function component?", options: ["useEffect", "useRef", "useState", "useMemo"], answer: 2 },
+    { q: "How does a parent pass data to a child?", options: ["Props", "Cookies", "Refs", "Context menus"], answer: 0 },
+    { q: "What must list elements have for stable rendering?", options: ["id attribute", "key prop", "name prop", "index.js"], answer: 1 },
+    { q: "Which hook runs side effects?", options: ["useReducer", "useState", "useCallback", "useEffect"], answer: 3 },
+    { q: "JSX stands for…", options: ["JavaScript XML", "Java Syntax Extension", "JSON XML", "JavaScript Extra"], answer: 0 },
+  ]},
+];
+
+/* ---------- LOGIN ---------- */
+function Login({ onLogin }) {
+  const [name, setName] = useState("");
+  const [error, setError] = useState("");
+  const submit = () => {
+    if (name.trim().length < 2) return setError("Enter your full name to continue.");
+    onLogin(name.trim());
+  };
+  return (
+    <section className="login">
+      <h1>Sit your exam online</h1>
+      <p>Timed multiple-choice tests with instant results.</p>
+      <div>
+        <label htmlFor="name">Candidate name</label>
+        <input id="name" value={name}
+          onChange={(e) => { setName(e.target.value); setError(""); }}
+          onKeyDown={(e) => { if (e.key === "Enter") submit(); }} />
+        {error && <p className="error">{error}</p>}
+        <button className="primary" onClick={submit}>Enter exam hall</button>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- DASHBOARD ---------- */
+function Dashboard({ exams, history, onStart }) {
+  return (
+    <section>
+      <h2>Available exams</h2>
+      <div className="grid">
+        {exams.map((e) => {
+          const tries = history.filter((h) => h.id === e.id);
+          const best = tries.length ? Math.max(...tries.map((t) => t.score)) : null;
+          return (
+            <article className="card" key={e.id}>
+              <h3>{e.title}</h3>
+              <p>{e.questions.length} questions · {e.minutes} minutes</p>
+              <p className="muted">{best === null ? "Not attempted yet" : `Best score: ${best}/${e.questions.length}`}</p>
+              <button className="primary" onClick={() => onStart(e)}>{best === null ? "Start exam" : "Retake exam"}</button>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+/* ---------- EXAM ---------- */
+function reducer(state, action) {
+  switch (action.type) {
+    case "answer": { const answers = [...state.answers]; answers[state.index] = action.option; return { ...state, answers }; }
+    case "go": return { ...state, index: action.index };
+    case "flag": {
+      const flagged = state.flagged.includes(state.index)
+        ? state.flagged.filter((i) => i !== state.index) : [...state.flagged, state.index];
+      return { ...state, flagged };
+    }
+    default: return state;
+  }
+}
+const fmt = (s) => String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
+
+function Exam({ exam, onFinish }) {
+  const n = exam.questions.length;
+  const [state, dispatch] = useReducer(reducer, { index: 0, answers: Array(n).fill(null), flagged: [] });
+  const [left, setLeft] = useState(exam.minutes * 60);
+
+  useEffect(() => {
+    if (left <= 0) { onFinish(state.answers); return; }
+    const t = setTimeout(() => setLeft((s) => s - 1), 1000);
+    return () => clearTimeout(t);
+  }, [left]);
+
+  const q = exam.questions[state.index];
+  const answered = state.answers.filter((a) => a !== null).length;
+  const submit = () => {
+    if (answered < n && !window.confirm((n - answered) + " question(s) unanswered. Submit anyway?")) return;
+    onFinish(state.answers);
+  };
+
+  return (
+    <section>
+      <div className="exam-head">
+        <h2>{exam.title}</h2>
+        <span className={"timer" + (left < 60 ? " low" : "")}>{fmt(left)}</span>
+      </div>
+      <div className="palette">
+        {exam.questions.map((_, i) => (
+          <button key={i} onClick={() => dispatch({ type: "go", index: i })}
+            className={"dot" + (i === state.index ? " current" : "") + (state.answers[i] !== null ? " done" : "") + (state.flagged.includes(i) ? " flag" : "")}>
+            {i + 1}
+          </button>
+        ))}
+      </div>
+      <div className="card">
+        <p className="muted">Question {state.index + 1} of {n}</p>
+        <h3>{q.q}</h3>
+        {q.options.map((opt, i) => (
+          <label key={i} className={"option" + (state.answers[state.index] === i ? " picked" : "")}>
+            <input type="radio" name="opt" checked={state.answers[state.index] === i}
+              onChange={() => dispatch({ type: "answer", option: i })} />
+            {opt}
+          </label>
+        ))}
+      </div>
+      <div className="actions">
+        <button disabled={state.index === 0} onClick={() => dispatch({ type: "go", index: state.index - 1 })}>Previous</button>
+        <button onClick={() => dispatch({ type: "flag" })}>{state.flagged.includes(state.index) ? "Remove flag" : "Flag for review"}</button>
+        {state.index < n - 1
+          ? <button className="primary" onClick={() => dispatch({ type: "go", index: state.index + 1 })}>Next</button>
+          : <button className="primary" onClick={submit}>Submit exam</button>}
+      </div>
+    </section>
+  );
+}
+
+/* ---------- RESULT ---------- */
+function Result({ exam, answers, onBack }) {
+  const score = answers.filter((a, i) => a === exam.questions[i].answer).length;
+  const total = exam.questions.length;
+  const pct = Math.round((score / total) * 100);
+  const passed = pct >= 60;
+  return (
+    <section>
+      <div className={"card summary " + (passed ? "pass" : "fail")}>
+        <h2>{passed ? "You passed" : "Not passed this time"}</h2>
+        <p className="big">{score}/{total} ({pct}%)</p>
+        <p>Pass mark is 60%.</p>
+        <button className="primary" onClick={onBack}>Back to exams</button>
+      </div>
+      <h3>Review your answers</h3>
+      {exam.questions.map((q, i) => {
+        const ok = answers[i] === q.answer;
+        return (
+          <article className="card" key={i}>
+            <p><strong>{i + 1}. {q.q}</strong></p>
+            <p className={ok ? "ok" : "bad"}>Your answer: {answers[i] === null ? "Skipped" : q.options[answers[i]]}</p>
+            {!ok && <p className="ok">Correct answer: {q.options[q.answer]}</p>}
+          </article>
+        );
+      })}
+    </section>
+  );
+}
+
+/* ---------- APP ---------- */
+function App() {
+  const [user, setUser] = useState("");
+  const [view, setView] = useState("login");   // login | dashboard | exam | result
+  const [exam, setExam] = useState(null);
+  const [answers, setAnswers] = useState([]);
+  const [history, setHistory] = useState([]);
+
+  const finishExam = (given) => {
+    const score = given.filter((a, i) => a === exam.questions[i].answer).length;
+    setAnswers(given);
+    setHistory([...history, { id: exam.id, score }]);
+    setView("result");
+  };
+
+  return (
+    <div>
+      {view !== "login" && (
+        <header className="topbar">
+          <strong>ExamHall</strong>
+          <span>{user}<button className="link" onClick={() => { setUser(""); setHistory([]); setView("login"); }}>Sign out</button></span>
+        </header>
+      )}
+      <main>
+        {view === "login" && <Login onLogin={(n) => { setUser(n); setView("dashboard"); }} />}
+        {view === "dashboard" && <Dashboard exams={exams} history={history} onStart={(e) => { setExam(e); setView("exam"); }} />}
+        {view === "exam" && <Exam exam={exam} onFinish={finishExam} />}
+        {view === "result" && <Result exam={exam} answers={answers} onBack={() => setView("dashboard")} />}
+      </main>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
